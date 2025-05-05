@@ -73,7 +73,7 @@ class ComentarioIncidencia(models.Model):
         on_delete=models.CASCADE,
         related_name='comentarios'
     )
-    autor = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    #autor = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     texto = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
