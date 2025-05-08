@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from incidencias.models import Incidencia
+from incidencias.models import Incidencia, Mensaje
 
 User = get_user_model()
 
@@ -28,3 +28,8 @@ class IncidenciaSerializer(serializers.ModelSerializer):
             "reportado_por",
         ]
         read_only_fields = ["id", "created_at", "updated_at", "asignado_a", "reportado_por"]
+
+class MensajeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Mensaje
+        fields = ['id', 'titulo', 'cuerpo', 'fecha_envio', 'leido']

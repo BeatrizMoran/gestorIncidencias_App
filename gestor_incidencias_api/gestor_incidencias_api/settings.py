@@ -31,11 +31,13 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'mysql.connector.django',
     "incidencias"
 ]
 
@@ -75,8 +77,12 @@ WSGI_APPLICATION = 'gestor_incidencias_api.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'mysql.connector.django',
+        'NAME': 'dam_grupo6',
+        'USER': 'dam_grupo6',
+        'PASSWORD': 'O9)jk.Jjl_c2CweY',
+        'HOST': '172.20.227.241',   # Desde casa: 150.241.37.58
+        'PORT': '3306',
     }
 }
 
