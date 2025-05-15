@@ -82,12 +82,14 @@ class ComentarioIncidencia(models.Model):
         return f"Comentario en Incidencia #{self.incidencia.id} por {self.autor.email}"
 
 class Mensaje(models.Model):
-    remitente = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, related_name='mensajes_enviados')
-    destinatario = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='mensajes')
-    titulo = models.CharField(max_length=100)
+    incidencia = models.ForeignKey('Incidencia', on_delete=models.CASCADE, related_name='mensajes')
+    remitente = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='mensajes_enviados')
+    destinatario = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='mensajes_recibidos')
     cuerpo = models.TextField()
     fecha_envio = models.DateTimeField(auto_now_add=True)
     leido = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.titulo} -> {self.destinatario.name}'
+        return f'Mensaje para {self.destinatario.name} - {self.fecha_envio}'
+
+
