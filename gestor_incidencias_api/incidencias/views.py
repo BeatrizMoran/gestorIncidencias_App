@@ -7,8 +7,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from incidencias.models import Incidencia, Mensaje
-from incidencias.serializers import IncidenciaSerializer, MensajeSerializer
+from incidencias.models import Incidencia, Notificacion
+from incidencias.serializers import IncidenciaSerializer, NotificacionSerializer
 
 
 # Create your views here.
@@ -99,8 +99,8 @@ class MensajesUsuarioView(APIView):
     #permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        mensajes = Mensaje.objects.filter(destinatario=request.user).order_by('-fecha_envio')
-        serializer = MensajeSerializer(mensajes, many=True)
+        notificaciones = Notificacion.objects.filter(destinatario=request.user).order_by('-fecha_envio')
+        serializer = NotificacionSerializer(notificaciones, many=True)
         return Response(serializer.data)
 
 #Gerentes
