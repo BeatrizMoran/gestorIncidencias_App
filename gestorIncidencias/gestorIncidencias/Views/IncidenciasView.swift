@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct IncidenciasView: View {
+    @StateObject private var viewModel = IncidenciaListViewModel()
     @Binding var selectedTab: Tab
     @State private var mostrarNotificaciones = false
 
@@ -46,16 +47,37 @@ struct IncidenciasView: View {
                 .padding()
                 .background(Color.black)
 
-                Spacer()
+                NavigationStack{
+                    List(viewModel.incidencias) { incidencia in
+                        
+                        HStack(spacing: 16){
+                            
+                            VStack(alignment: .leading){
+                                Text(incidencia.descripcion)
+                                    .font(.headline)
+                                
+                                Text(incidencia.ubicacion)
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                        }
+                        
+                    }
+                }
             }
             .navigationDestination(isPresented: $mostrarNotificaciones) {
                 NotificacionesView()
             }
-            .onChange(of: selectedTab) { newValue in
+            .onChange(of: selectedTab) { oldValue, newValue in
                 if newValue == .home {
-                    mostrarNotificaciones = false // reset al volver a Home
+                    mostrarNotificaciones = false
                 }
             }
+
+        }
+        .onAppear{
+            viewModel.fetchIncidencias()
         }
     }
 }
