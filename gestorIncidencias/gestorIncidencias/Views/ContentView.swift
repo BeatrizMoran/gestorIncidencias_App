@@ -7,15 +7,37 @@
 
 import SwiftUI
 
+enum Tab {
+    case nueva
+    case home
+    case resueltas
+}
+
 struct ContentView: View {
+    @State private var selectedTab: Tab = .home
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        TabView(selection: $selectedTab) {
+            
+            NuevaIncidenciaView()
+                .tabItem {
+                    Label("Nueva Incidencia", systemImage: "plus.circle.fill")
+                }
+                .tag(Tab.nueva)
+
+            IncidenciasView()
+                .tabItem {
+                    Label("Home", systemImage: "house")
+                }
+                .tag(Tab.home)
+
+            ResueltasView()
+                .tabItem {
+                    Label("Incidencias Resueltas", systemImage: "checkmark.seal.fill")
+                }
+                .tag(Tab.resueltas)
         }
-        .padding()
+        .tint(.black)
     }
 }
 
