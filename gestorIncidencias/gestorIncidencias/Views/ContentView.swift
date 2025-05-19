@@ -15,17 +15,16 @@ enum Tab {
 
 struct ContentView: View {
     @State private var selectedTab: Tab = .home
-    
+
     var body: some View {
         TabView(selection: $selectedTab) {
-            
             NuevaIncidenciaView()
                 .tabItem {
-                    Label("Nueva Incidencia", systemImage: "plus.circle.fill")
+                    Label("Nueva", systemImage: "plus.circle.fill")
                 }
                 .tag(Tab.nueva)
 
-            IncidenciasView()
+            IncidenciasView(selectedTab: $selectedTab)
                 .tabItem {
                     Label("Home", systemImage: "house")
                 }
@@ -33,14 +32,10 @@ struct ContentView: View {
 
             ResueltasView()
                 .tabItem {
-                    Label("Incidencias Resueltas", systemImage: "checkmark.seal.fill")
+                    Label("Resueltas", systemImage: "checkmark.seal.fill")
                 }
                 .tag(Tab.resueltas)
         }
         .tint(.black)
     }
-}
-
-#Preview {
-    ContentView()
 }
