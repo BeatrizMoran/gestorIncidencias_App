@@ -10,7 +10,6 @@ import SwiftUI
 class IncidenciaListViewModel: ObservableObject {
    
     @Published var incidencias: [Incidencia] = []
-    
 
     func fetchIncidencias() {
         guard let url = URL(string : "\(API.baseURL)/incidencias") else {

@@ -16,11 +16,12 @@ from incidencias.serializers import IncidenciaSerializer, NotificacionSerializer
 class IncidenciasListApiView(APIView):
     #añade permisos para comprobar si el usuario esta autenticado
     authentication_classes = [JWTAuthentication]
-    permission_classes = [ReadOnlyPermission]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        departamentos = Incidencia.objects.all()
-        serializer = IncidenciaSerializer(departamentos, many=True)
+        # Filtrar solo incidencias asignadas al usuario actual
+        incidencias = Incidencia.objects.filter(asignado_a=request.user)
+        serializer = IncidenciaSerializer(incidencias, many=True)
         return Response(serializer.data, status = status.HTTP_200_OK)
 
     # generar automáticamente documentación Swagger/OpenAPI
@@ -35,7 +36,7 @@ class IncidenciasListApiView(APIView):
 
 class IncidenciaDetailApiView(APIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [ReadOnlyPermission]
+    permission_classes = [IsAuthenticated]
 
     def get_object(self, incidencia_id):
         try:
@@ -95,8 +96,9 @@ class IncidenciaDetailApiView(APIView):
 
 #Mensajes
 
-class MensajesUsuarioView(APIView):
-    #permission_classes = [IsAuthenticated]
+class NotificacionesUsuarioView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         notificaciones = Notificacion.objects.filter(destinatario=request.user).order_by('-fecha_envio')
@@ -104,3 +106,15 @@ class MensajesUsuarioView(APIView):
         return Response(serializer.data)
 
 #Gerentes
+
+
+class NotificacionesListApiView(APIView):
+    #añade permisos para comprobar si el usuario esta autenticado
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        # Filtrar solo notificaciones asignadas al usuario actual
+        notificaciones = Notificacion.objects.filter(destinatario=request.user)
+        serializer = NotificacionSerializer(notificaciones, many=True)
+        return Response(serializer.data, status = status.HTTP_200_OK)
