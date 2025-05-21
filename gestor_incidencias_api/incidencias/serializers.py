@@ -13,7 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
 class ComentarioIncidenciaSerializer(serializers.ModelSerializer):
     class Meta:
         model = ComentarioIncidencia
-        fields = ['id',"texto", "created_at", "updated_at"]
+        fields = ['id',"texto", "created_at", "updated_at", "incidencia"]
 
 class IncidenciaSerializer(serializers.ModelSerializer):
     comentarios = ComentarioIncidenciaSerializer(many=True, read_only=True)

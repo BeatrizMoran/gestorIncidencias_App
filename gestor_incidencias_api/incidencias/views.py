@@ -142,24 +142,59 @@ class NotificacionDetailApiView(APIView):
         return Response(serializer.data, status = status.HTTP_200_OK)
 
 
-class ComentariosIncidenciaView(APIView):
+#Listar todos los comentarios de una incidencia, y crear comentario
+class ComentariosIncidenciaListApiView(APIView):
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, incidencia_id):
-        comentarios = ComentarioIncidencia.objects.filter(incidencia__id=incidencia_id)
-        serializer = ComentarioIncidenciaSerializer(comentarios, many=True)
-        return Response(serializer.data)
-
-    def post(self, request, incidencia_id):
+    def get(self, request, incidencia_id, *args, **kwargs):
+        # Obtener la incidencia o devolver 404
         try:
             incidencia = Incidencia.objects.get(id=incidencia_id)
         except Incidencia.DoesNotExist:
-            return Response({'error': 'Incidencia no encontrada'}, status=404)
+            return Response({"res": "Incidencia no encontrada"}, status=status.HTTP_404_NOT_FOUND)
 
+        comentarios = incidencia.comentarios.all()  # related_name='comentarios'
+        serializer = ComentarioIncidenciaSerializer(comentarios, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, incidencia_id, *args, **kwargs):
+        # Añadir incidencia al data recibido para que el serializer pueda validar correctamente
         data = request.data.copy()
-        data['incidencia'] = incidencia.id
+        data['incidencia'] = incidencia_id
+
         serializer = ComentarioIncidenciaSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+#ver detalle y borrar un comentario de una incidencia
+class ComentarioIncidenciaDetailApiView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, incidencia_id, comentario_id):
+        try:
+            comentario = ComentarioIncidencia.objects.get(id=comentario_id, incidencia_id=incidencia_id)
+            return comentario
+        except ComentarioIncidencia.DoesNotExist:
+            return None
+
+    def get(self, request, incidencia_id, comentario_id, *args, **kwargs):
+        comentario = self.get_object(incidencia_id, comentario_id)
+        if not comentario:
+            return Response({"res": "Comentario no encontrado para esta incidencia"}, status=status.HTTP_404_NOT_FOUND)
+        serializer = ComentarioIncidenciaSerializer(comentario)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+    def delete(self, request, incidencia_id, comentario_id, *args, **kwargs):
+        comentario = self.get_object(incidencia_id, comentario_id)
+        if not comentario:
+            return Response({"res": "Comentario no encontrado para esta incidencia"}, status=status.HTTP_404_NOT_FOUND)
+        comentario.delete()
+        return Response({"res": "Comentario eliminado"}, status=status.HTTP_200_OK)
+
