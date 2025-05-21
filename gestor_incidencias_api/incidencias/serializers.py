@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from incidencias.models import Incidencia, CustomUser, Notificacion
+from incidencias.models import Incidencia, CustomUser, Notificacion, ComentarioIncidencia
 
 User = get_user_model()
 
@@ -48,6 +48,43 @@ class IncidenciaSerializer(serializers.ModelSerializer):
 
 
 class NotificacionSerializer(serializers.ModelSerializer):
+    incidencia = serializers.PrimaryKeyRelatedField(
+        queryset=Incidencia.objects.all(),
+        required=False,
+        allow_null=True,
+        write_only=True
+    )
+    remitente = serializers.PrimaryKeyRelatedField(
+        queryset=CustomUser.objects.all(),
+        required=False,
+        allow_null=True,
+        write_only=True
+    )
+
+    destinatario = serializers.PrimaryKeyRelatedField(
+        queryset=CustomUser.objects.all(),
+        required=False,
+        allow_null=True,
+        write_only=True
+    )
+    incidencia_data = IncidenciaSerializer(source="incidencia", read_only=True)
+
+    remitente_data = UserSerializer(source="remitente", read_only=True)
+
+    destinatario_data = UserSerializer(source="destinatario", read_only=True)
     class Meta:
         model = Notificacion
-        fields = ['id', 'titulo', 'cuerpo', 'fecha_envio', 'leido']
+        fields = ['id',
+                  "incidencia",
+                  "incidencia_data",
+                  'remitente',
+                  'remitente_data',
+                  'destinatario',
+                  'destinatario_data',
+                  "cuerpo",
+                  "fecha_envio",
+                  "leido"]
+
+class ComentarioIncidenciaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ComentarioIncidencia

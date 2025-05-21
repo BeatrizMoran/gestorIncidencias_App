@@ -118,3 +118,25 @@ class NotificacionesListApiView(APIView):
         notificaciones = Notificacion.objects.filter(destinatario=request.user)
         serializer = NotificacionSerializer(notificaciones, many=True)
         return Response(serializer.data, status = status.HTTP_200_OK)
+
+class NotificacionDetailApiView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, notificacion_id):
+        try:
+            return Notificacion.objects.get(id=notificacion_id)
+        except Notificacion.DoesNotExist:
+            return None
+
+    def get(self, request, notificacion_id, *args, **kwargs):
+        notificacion_instance = self.get_object(notificacion_id)
+        if not(notificacion_instance):
+            return Response(
+                {
+                    "res": "Object with notificacion id does not exist"
+                },
+                status = status.HTTP_404_BAD_REQUEST
+            )
+        serializer = NotificacionSerializer(notificacion_instance)
+        return Response(serializer.data, status = status.HTTP_200_OK)
