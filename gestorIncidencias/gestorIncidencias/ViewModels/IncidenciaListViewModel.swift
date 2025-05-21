@@ -34,8 +34,6 @@ class IncidenciaListViewModel: ObservableObject {
 
         let authValue = "JWT \(token)"
         
-        print(authValue)
-        
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue(authValue, forHTTPHeaderField: "Authorization")

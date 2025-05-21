@@ -45,7 +45,7 @@ struct ContentView: View {
                         }
                         .tag(Tab.home)
 
-                    ResueltasView()
+                    ResueltasView(viewModel: incidenciaVM)
                         .tabItem {
                             Label("Resueltas", systemImage: "checkmark.seal.fill")
                         }

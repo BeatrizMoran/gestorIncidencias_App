@@ -50,7 +50,10 @@ struct IncidenciasView: View {
                 .background(Color.black)
 
                 NavigationStack{
-                    List(viewModel.incidencias) { incidencia in
+                    
+                    let noResueltas = viewModel.incidencias.filter { $0.estado != "resuelta" }
+                    
+                    List(noResueltas) { incidencia in
                         
                         HStack(spacing: 16){
                             
