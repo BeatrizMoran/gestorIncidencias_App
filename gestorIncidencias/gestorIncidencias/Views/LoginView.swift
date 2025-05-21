@@ -28,7 +28,7 @@ struct LoginView: View {
 
             Button("Entrar") {
                 
-                authVM.login(email: email, password: password) { success in
+                authVM.login(email: email.lowercased(), password: password) { success in
                         if success {
                             onLoginSuccess()
                         } else {

@@ -12,7 +12,7 @@ class AuthViewModel: ObservableObject {
     @Published var token: String? = nil
 
     func login(email: String, password: String, completion: @escaping (Bool) -> Void) {
-        guard let url = URL(string: "http://10.100.252.110:8000/api/jwt/create") else {
+        guard let url = URL(string: "http://10.100.252.110:8000/auth/jwt/create") else {
             completion(false) // URL mal formada
             return
         }
