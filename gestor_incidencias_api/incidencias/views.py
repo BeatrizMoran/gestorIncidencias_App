@@ -7,8 +7,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from incidencias.models import Incidencia, Notificacion
-from incidencias.serializers import IncidenciaSerializer, NotificacionSerializer
+from incidencias.models import Incidencia, Notificacion, ComentarioIncidencia
+from incidencias.serializers import IncidenciaSerializer, NotificacionSerializer, ComentarioIncidenciaSerializer
 
 
 # Create your views here.
@@ -140,3 +140,26 @@ class NotificacionDetailApiView(APIView):
             )
         serializer = NotificacionSerializer(notificacion_instance)
         return Response(serializer.data, status = status.HTTP_200_OK)
+
+
+class ComentariosIncidenciaView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, incidencia_id):
+        comentarios = ComentarioIncidencia.objects.filter(incidencia__id=incidencia_id)
+        serializer = ComentarioIncidenciaSerializer(comentarios, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, incidencia_id):
+        try:
+            incidencia = Incidencia.objects.get(id=incidencia_id)
+        except Incidencia.DoesNotExist:
+            return Response({'error': 'Incidencia no encontrada'}, status=404)
+
+        data = request.data.copy()
+        data['incidencia'] = incidencia.id
+        serializer = ComentarioIncidenciaSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)

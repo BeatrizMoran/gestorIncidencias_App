@@ -10,7 +10,13 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'email', 'name']
 
+class ComentarioIncidenciaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ComentarioIncidencia
+        fields = ['id',"texto", "created_at", "updated_at"]
+
 class IncidenciaSerializer(serializers.ModelSerializer):
+    comentarios = ComentarioIncidenciaSerializer(many=True, read_only=True)
     asignado_a = serializers.PrimaryKeyRelatedField(
         queryset=CustomUser.objects.all(),
         required=False,
@@ -42,7 +48,8 @@ class IncidenciaSerializer(serializers.ModelSerializer):
             "asignado_a",
             "asignado_a_data",
             "reportado_por",
-            "reportado_por_data"
+            "reportado_por_data",
+            "comentarios"
         ]
         read_only_fields = ["id", "created_at", "updated_at"]
 
@@ -85,6 +92,4 @@ class NotificacionSerializer(serializers.ModelSerializer):
                   "fecha_envio",
                   "leido"]
 
-class ComentarioIncidenciaSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ComentarioIncidencia
+
