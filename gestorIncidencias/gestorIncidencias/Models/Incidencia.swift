@@ -16,6 +16,7 @@ struct Incidencia: Identifiable, Codable {
     var updatedAt: String
     var asignadoA: Usuario?
     var reportadoPor: Usuario
+    var comentarios: [ComentarioIncidencia]
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -27,5 +28,6 @@ struct Incidencia: Identifiable, Codable {
         case updatedAt = "updated_at"
         case asignadoA = "asignado_a_data"
         case reportadoPor = "reportado_por_data"
+        case comentarios
     }
 }
