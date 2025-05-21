@@ -36,11 +36,9 @@ class AuthViewModel: ObservableObject {
 
             if let decodedResponse = try? JSONDecoder().decode(LoginResponse.self, from: data) {
                 DispatchQueue.main.async {
-                    print(String(data: data, encoding: .utf8) ?? "Data inválida")
 
                     //self.user = decodedResponse.user
                     //self.token = decodedResponse.access_token
-                    print("dentro")
                     self.token = decodedResponse.access
                     
                     completion(true) // ✅ Login correcto

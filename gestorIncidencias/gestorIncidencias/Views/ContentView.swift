@@ -16,7 +16,18 @@ enum Tab {
 struct ContentView: View {
     @State private var selectedTab: Tab = .home
     @State private var isLoggedIn = false
-    @StateObject private var authVM = AuthViewModel()
+
+    @StateObject private var authVM: AuthViewModel
+    @StateObject private var incidenciaVM: IncidenciaListViewModel
+
+    init() {
+        // Crear el ViewModel de autenticación
+        let auth = AuthViewModel()
+        _authVM = StateObject(wrappedValue: auth)
+
+        // Crear el ViewModel de incidencias con la misma instancia de auth
+        _incidenciaVM = StateObject(wrappedValue: IncidenciaListViewModel(auth: auth))
+    }
 
     var body: some View {
         Group {
@@ -28,7 +39,7 @@ struct ContentView: View {
                         }
                         .tag(Tab.nueva)
 
-                    IncidenciasView(selectedTab: $selectedTab)
+                    IncidenciasView(selectedTab: $selectedTab, viewModel: incidenciaVM)
                         .tabItem {
                             Label("Home", systemImage: "house")
                         }
@@ -44,6 +55,7 @@ struct ContentView: View {
             } else {
                 LoginView(onLoginSuccess: {
                     isLoggedIn = true
+                    // No hace falta volver a crear el ViewModel aquí
                 }, authVM: authVM)
             }
         }

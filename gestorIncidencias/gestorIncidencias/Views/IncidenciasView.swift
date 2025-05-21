@@ -7,10 +7,12 @@
 
 import SwiftUI
 
+
 struct IncidenciasView: View {
-    @StateObject private var viewModel = IncidenciaListViewModel()
-    @Binding var selectedTab: Tab
-    @State private var mostrarNotificaciones = false
+        @Binding var selectedTab: Tab
+        @ObservedObject var viewModel: IncidenciaListViewModel
+        @State private var mostrarNotificaciones = false
+
 
     var body: some View {
         NavigationStack {
@@ -76,8 +78,6 @@ struct IncidenciasView: View {
             }
 
         }
-        .onAppear{
-            viewModel.fetchIncidencias()
-        }
+        
     }
 }

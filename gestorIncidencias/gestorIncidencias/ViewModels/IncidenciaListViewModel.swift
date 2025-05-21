@@ -7,31 +7,55 @@
 
 import SwiftUI
 
+import Combine
+
 class IncidenciaListViewModel: ObservableObject {
-   
     @Published var incidencias: [Incidencia] = []
 
-    func fetchIncidencias() {
-        guard let url = URL(string : "\(API.baseURL)/incidencias") else {
-            print("URL no válida")
+    private var auth: AuthViewModel
+    private var tokenCancellable: AnyCancellable?
+
+    init(auth: AuthViewModel) {
+        self.auth = auth
+
+        // Escuchar cambios del token
+        tokenCancellable = auth.$token.sink { [weak self] token in
+            guard let self = self, let token = token else { return }
+            print("✅ Token recibido en IncidenciaListViewModel: \(token)")
+            self.fetchIncidencias(token: token)
+        }
+    }
+
+    private func fetchIncidencias(token: String) {
+        guard let url = URL(string: "\(API.baseURL)/incidencias") else {
+            print("❌ URL no válida")
             return
         }
+
+        let authValue = "JWT \(token)"
         
-        URLSession.shared.dataTask(with: url) { data, response, error in
+        print(authValue)
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue(authValue, forHTTPHeaderField: "Authorization")
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data {
                 if let decodedResponse = try? JSONDecoder().decode([Incidencia].self, from: data) {
-                    // Imprimir en consola para ver las Incidencias
-                    print("Incidencias recibidos: \(decodedResponse)")
-                    
                     DispatchQueue.main.async {
                         self.incidencias = decodedResponse
+                        print("✅ Incidencias cargadas: \(decodedResponse.count)")
                     }
                 } else {
-                    print("Error al decodificar las incidencias")
+                    print("❌ Error al decodificar incidencias")
+                    print(String(data: data, encoding: .utf8) ?? "Respuesta no legible")
                 }
             } else if let error = error {
-                print("Error en la solicitud: \(error.localizedDescription)")
+                print("❌ Error en la solicitud: \(error.localizedDescription)")
             }
         }.resume()
     }
 }
+
+
