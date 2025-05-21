@@ -16,7 +16,7 @@ class AuthViewModel: ObservableObject {
             completion(false) // URL mal formada
             return
         }
-
+        
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -24,6 +24,8 @@ class AuthViewModel: ObservableObject {
         let loginData = LoginRequest(email: email, password: password)
         request.httpBody = try? JSONEncoder().encode(loginData)
 
+        print(loginData)
+        
         URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data else {
                 DispatchQueue.main.async {
@@ -34,12 +36,20 @@ class AuthViewModel: ObservableObject {
 
             if let decodedResponse = try? JSONDecoder().decode(LoginResponse.self, from: data) {
                 DispatchQueue.main.async {
-                    self.user = decodedResponse.user
-                    self.token = decodedResponse.access_token
+                    print(String(data: data, encoding: .utf8) ?? "Data inválida")
+
+                    //self.user = decodedResponse.user
+                    //self.token = decodedResponse.access_token
+                    print("dentro")
+                    self.token = decodedResponse.access
+                    
                     completion(true) // ✅ Login correcto
                 }
             } else {
                 DispatchQueue.main.async {
+                    print(String(data: data, encoding: .utf8) ?? "Data inválida")
+
+                    print("fallo")
                     completion(false) // ❌ Falló el decode = login inválido
                 }
             }

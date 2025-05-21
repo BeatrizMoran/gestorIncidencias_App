@@ -6,8 +6,11 @@
 //
 
 struct LoginResponse: Codable{
-    let access_token: String
-    let toke_type: String
-    let expires_in : Int
-    let user: Usuario
+    //let access_token: String
+    //let toke_type: String
+    //let expires_in : Int
+    //let user: Usuario
+    
+    let refresh: String
+    let access: String
 }
