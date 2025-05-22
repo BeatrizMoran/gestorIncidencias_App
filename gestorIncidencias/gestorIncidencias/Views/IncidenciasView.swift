@@ -13,7 +13,7 @@ struct IncidenciasView: View {
     @State private var mostrarNotificaciones = false
     @State private var incidenciaSeleccionada: Incidencia? = nil
     @State private var mostrarDetalle = false
-    @State private var estadoSeleccionado: String = ""
+    @State private var estadoSeleccionado: String = "pendiente"
     let estadosDisponibles = ["pendiente", "en_proceso", "resuelta", "cancelada"]
 
     var body: some View {
@@ -75,6 +75,9 @@ struct IncidenciasView: View {
                             }
                         }
                         .padding(.vertical, 8)
+                    }
+                    .refreshable {
+                        viewModel.refetch()
                     }
                 }
                 .navigationDestination(isPresented: $mostrarNotificaciones) {

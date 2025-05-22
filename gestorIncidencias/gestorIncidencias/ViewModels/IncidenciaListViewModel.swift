@@ -14,18 +14,27 @@ class IncidenciaListViewModel: ObservableObject {
 
     private var auth: AuthViewModel
     private var tokenCancellable: AnyCancellable?
+    private var currentToken: String?
 
     init(auth: AuthViewModel) {
         self.auth = auth
 
-        // Escuchar cambios del token
         tokenCancellable = auth.$token.sink { [weak self] token in
             guard let self = self, let token = token else { return }
+            self.currentToken = token
             print("✅ Token recibido en IncidenciaListViewModel: \(token)")
             self.fetchIncidencias(token: token)
         }
     }
 
+    func refetch(){
+        guard let token = currentToken else {
+            print("❌ No hay token disponible para recargar incidencias")
+            return
+        }
+        fetchIncidencias(token: token)
+    }
+    
     private func fetchIncidencias(token: String) {
         guard let url = URL(string: "\(API.baseURL)/incidencias") else {
             print("❌ URL no válida")

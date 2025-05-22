@@ -37,7 +37,6 @@ struct ResueltasView: View {
                 .background(Color.black)
                 
                 NavigationStack {
-                    // Filtramos sólo las incidencias resueltas:
                     let resueltas = viewModel.incidencias.filter { $0.estado == "resuelta" }
 
                     List(resueltas) { incidencia in
@@ -61,11 +60,13 @@ struct ResueltasView: View {
                         }
                         .padding(.vertical, 8)
                     }
+                    .refreshable {
+                        viewModel.refetch()
+                    }
                 }
             }
             .blur(radius: mostrarDetalle ? 5 : 0)
             
-            // Detalle superpuesto (solo lectura, sin picker ni botón)
             if let incidencia = incidenciaSeleccionada, mostrarDetalle {
                 Color.black.opacity(0.4)
                     .ignoresSafeArea()
