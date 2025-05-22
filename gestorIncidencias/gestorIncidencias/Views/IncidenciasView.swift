@@ -169,5 +169,11 @@ struct IncidenciasView: View {
                 estadoSeleccionado = incidencia.estado
             }
         }
+        .onChange(of: selectedTab) { _, newValue in
+            if newValue == .home {
+                mostrarNotificaciones = false
+                viewModel.refetch()
+            }
+        }
     }
 }

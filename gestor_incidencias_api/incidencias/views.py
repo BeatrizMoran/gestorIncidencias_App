@@ -29,8 +29,15 @@ class IncidenciasListApiView(APIView):
     def post(self, request, *args, **kwargs):
         serializer = IncidenciaSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(reportado_por=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            # Guardamos la incidencia con el usuario reportante
+            incidencia = serializer.save(reportado_por=request.user)
+
+            # Si no se proporciona "asignado_a", lo asignamos al usuario actual
+            if not incidencia.asignado_a:
+                incidencia.asignado_a = request.user
+                incidencia.save()
+
+            return Response(IncidenciaSerializer(incidencia).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

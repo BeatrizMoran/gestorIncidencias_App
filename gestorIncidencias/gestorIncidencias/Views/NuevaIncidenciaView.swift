@@ -8,16 +8,13 @@
 import SwiftUI
 
 struct NuevaIncidenciaView: View {
-    @State private var descripcion: String = ""
-    @State private var ubicacion: String = ""
-    @State private var urgencia: String = "Baja"
-    
-    let nivelesUrgencia = ["Baja", "Media", "Alta"]
+    @ObservedObject var viewModel: NuevaIncidenciaViewModel
+    @Binding var selectedTab: Tab
 
     var body: some View {
-        NavigationView {
-            VStack{
-                
+        NavigationStack {
+            VStack {
+                // Cabecera
                 HStack {
                     Image(systemName: "exclamationmark.bubble.fill")
                         .resizable()
@@ -33,56 +30,61 @@ struct NuevaIncidenciaView: View {
                         .font(.system(size: 26, weight: .bold))
                         .padding()
                         .cornerRadius(10)
+
+                    Spacer()
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
                 .background(Color.black)
 
-                // Formulario
                 Form {
                     Section(header: Text("Descripción")) {
-                        TextField("Describe la incidencia...", text: $descripcion)
+                        TextField("Descripción", text: $viewModel.descripcion)
                     }
 
                     Section(header: Text("Ubicación")) {
-                        TextField("¿Dónde ocurre la incidencia?", text: $ubicacion)
+                        TextField("Ubicación", text: $viewModel.ubicacion)
                     }
 
                     Section(header: Text("Urgencia")) {
-                        Picker("Nivel de urgencia", selection: $urgencia) {
-                            ForEach(nivelesUrgencia, id: \.self) { nivel in
-                                Text(nivel)
-                            }
+                        Picker("Urgencia", selection: $viewModel.urgencia) {
+                            Text("Baja").tag("Baja")
+                            Text("Media").tag("Media")
+                            Text("Alta").tag("Alta")
                         }
                         .pickerStyle(SegmentedPickerStyle())
                     }
-                    
-                    Section {
-                        Button(action: registrarIncidencia) {
-                            HStack {
-                                Image(systemName: "paperplane.fill")
-                                Text("Registrar Incidencia")
-                                    .fontWeight(.bold)
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .foregroundColor(.white)
-                            .background(Color.black)
-                            .cornerRadius(8)
+
+                    if let error = viewModel.errorMessage {
+                        Section {
+                            Text(error)
+                                .foregroundColor(.red)
                         }
+                    }
+
+                    if let success = viewModel.successMessage {
+                        Section {
+                            Text(success)
+                                .foregroundColor(.green)
+                        }
+                    }
+
+                    Section {
+                        Button("Registrar Incidencia") {
+                            viewModel.crearIncidencia()
+                        }
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.black)
+                        .cornerRadius(8)
+                    }
+                }
+                .onChange(of: viewModel.successMessage) { _, newValue in
+                    if newValue != nil {
+                        selectedTab = .home
                     }
                 }
             }
-            .navigationBarHidden(true)
         }
     }
-
-    // Acción al registrar
-    func registrarIncidencia() {
-        print("Descripción: \(descripcion)")
-        print("Ubicación: \(ubicacion)")
-        print("Urgencia: \(urgencia)")
-        // Aquí podrías guardar la incidencia, subirla a una base de datos, etc.
-    }
 }
-

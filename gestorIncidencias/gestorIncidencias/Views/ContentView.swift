@@ -33,7 +33,7 @@ struct ContentView: View {
         Group {
             if isLoggedIn {
                 TabView(selection: $selectedTab) {
-                    NuevaIncidenciaView()
+                    NuevaIncidenciaView(viewModel: NuevaIncidenciaViewModel(authViewModel: authVM), selectedTab: $selectedTab)
                         .tabItem {
                             Label("Nueva", systemImage: "plus.circle.fill")
                         }
