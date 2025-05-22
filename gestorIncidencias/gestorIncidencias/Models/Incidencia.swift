@@ -6,7 +6,7 @@
 //
 import Foundation
 
-struct Incidencia: Identifiable, Codable {
+struct Incidencia: Identifiable, Codable, Equatable {
     var id: Int
     var descripcion: String
     var ubicacion: String

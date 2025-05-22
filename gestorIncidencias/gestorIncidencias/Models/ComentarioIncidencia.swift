@@ -5,7 +5,7 @@
 //  Created by  on 19/5/25.
 //
 
-struct ComentarioIncidencia: Identifiable, Codable {
+struct ComentarioIncidencia: Identifiable, Codable, Equatable {
     let id: Int
     let texto: String
     let createdAt: String
