@@ -19,6 +19,7 @@ struct ContentView: View {
 
     @StateObject private var authVM: AuthViewModel
     @StateObject private var incidenciaVM: IncidenciaListViewModel
+    @StateObject private var actualizarVM: ActualizarIncidenciaViewModel
 
     init() {
         // Crear el ViewModel de autenticación
@@ -27,6 +28,8 @@ struct ContentView: View {
 
         // Crear el ViewModel de incidencias con la misma instancia de auth
         _incidenciaVM = StateObject(wrappedValue: IncidenciaListViewModel(auth: auth))
+        
+        _actualizarVM = StateObject(wrappedValue: ActualizarIncidenciaViewModel(authViewModel: auth))
     }
 
     var body: some View {
@@ -39,7 +42,7 @@ struct ContentView: View {
                         }
                         .tag(Tab.nueva)
 
-                    IncidenciasView(selectedTab: $selectedTab, viewModel: incidenciaVM)
+                    IncidenciasView(selectedTab: $selectedTab, viewModel: incidenciaVM, actualizarViewModel: actualizarVM)
                         .tabItem {
                             Label("Home", systemImage: "house")
                         }

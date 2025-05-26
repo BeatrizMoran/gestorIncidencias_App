@@ -10,6 +10,7 @@ import SwiftUI
 struct IncidenciasView: View {
     @Binding var selectedTab: Tab
     @ObservedObject var viewModel: IncidenciaListViewModel
+    @ObservedObject var actualizarViewModel: ActualizarIncidenciaViewModel
     @State private var mostrarNotificaciones = false
     @State private var incidenciaSeleccionada: Incidencia? = nil
     @State private var mostrarDetalle = false
@@ -77,6 +78,7 @@ struct IncidenciasView: View {
                         .padding(.vertical, 8)
                     }
                     .refreshable {
+                        
                         viewModel.refetch()
                     }
                 }
@@ -123,6 +125,13 @@ struct IncidenciasView: View {
                         .font(.headline)
                     Text(incidencia.ubicacion)
                         .font(.body)
+                    
+                    Text("Urgencia")
+                        .font(.headline)
+                    Text(incidencia.urgencia)
+                        .font(.body)
+                    
+                    Text(incidencia.estado)
 
                     Text("Estado")
                         .font(.headline)
@@ -141,11 +150,12 @@ struct IncidenciasView: View {
                     Spacer()
 
                     Button(action: {
-                        // Aquí iría la lógica para guardar el cambio en el backend o en viewModel
-                        // viewModel.actualizarEstado(incidencia: incidencia, nuevoEstado: estadoSeleccionado)
-
-                        withAnimation {
-                            mostrarDetalle = false
+                        actualizarViewModel.actualizarIncidencia(incidencia: incidencia, nuevoEstado: estadoSeleccionado) {
+                            viewModel.refetch() 
+                            incidenciaSeleccionada = nil
+                            withAnimation {
+                                mostrarDetalle = false
+                            }
                         }
                     }) {
                         Text("Actualizar estado")
@@ -155,6 +165,7 @@ struct IncidenciasView: View {
                             .foregroundColor(.white)
                             .cornerRadius(12)
                     }
+
                 }
                 .padding()
                 .background(Color.white)
