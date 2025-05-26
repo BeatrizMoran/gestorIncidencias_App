@@ -10,9 +10,11 @@ import SwiftUI
 class AuthViewModel: ObservableObject {
     @Published var user: Usuario? = nil
     @Published var token: String? = nil
+    @Published var refreshToken: String? = nil
+
 
     func login(email: String, password: String, completion: @escaping (Bool) -> Void) {
-        guard let url = URL(string: "http://10.100.252.110:8000/auth/jwt/create") else {
+        guard let url = URL(string: "\(API.baseURL)/auth/jwt/create") else {
             completion(false) // URL mal formada
             return
         }
@@ -40,6 +42,8 @@ class AuthViewModel: ObservableObject {
                     //self.user = decodedResponse.user
                     //self.token = decodedResponse.access_token
                     self.token = decodedResponse.access
+                    self.refreshToken = decodedResponse.refresh
+
                     
                     completion(true) // ✅ Login correcto
                 }
@@ -53,9 +57,48 @@ class AuthViewModel: ObservableObject {
             }
         }.resume()
     }
+    
+    //  Refresh Token
+        func refreshTokenIfNeeded(completion: @escaping (Bool) -> Void) {
+            guard let refresh = refreshToken,
+                  let url = URL(string: "\(API.baseURL)/auth/jwt/refresh") else {
+                completion(false)
+                return
+            }
+
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+            let body = ["refresh": refresh]
+            request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+
+            URLSession.shared.dataTask(with: request) { data, response, error in
+                guard let data = data else {
+                    DispatchQueue.main.async {
+                        completion(false)
+                    }
+                    return
+                }
+
+                if let decoded = try? JSONDecoder().decode(RefreshResponse.self, from: data) {
+                    DispatchQueue.main.async {
+                        self.token = decoded.access
+                        completion(true)
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        print("Refresh error:", String(data: data, encoding: .utf8) ?? "")
+                        self.logout()
+                        completion(false)
+                    }
+                }
+            }.resume()
+        }
 
     func logout() {
         self.user = nil
         self.token = nil
+        self.refreshToken = nil
     }
 }

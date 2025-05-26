@@ -16,6 +16,7 @@ struct NuevaIncidenciaView: View {
             VStack {
                 // Cabecera
                 HStack {
+                    
                     Image(systemName: "exclamationmark.bubble.fill")
                         .resizable()
                         .foregroundStyle(Color.white)
@@ -70,18 +71,17 @@ struct NuevaIncidenciaView: View {
 
                     Section {
                         Button("Registrar Incidencia") {
-                            viewModel.crearIncidencia()
+                            viewModel.crearIncidencia{
+                                selectedTab = .home
+                                
+                            }
+                            
                         }
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(Color.black)
                         .cornerRadius(8)
-                    }
-                }
-                .onChange(of: viewModel.successMessage) { _, newValue in
-                    if newValue != nil {
-                        selectedTab = .home
                     }
                 }
             }

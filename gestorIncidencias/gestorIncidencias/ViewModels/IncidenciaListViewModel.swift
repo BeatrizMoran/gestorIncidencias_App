@@ -22,32 +22,46 @@ class IncidenciaListViewModel: ObservableObject {
         tokenCancellable = auth.$token.sink { [weak self] token in
             guard let self = self, let token = token else { return }
             self.currentToken = token
-            print("✅ Token recibido en IncidenciaListViewModel: \(token)")
-            self.fetchIncidencias(token: token)
+            self.fetchIncidencias() // Usamos el token más reciente
         }
     }
 
-    func refetch(){
-        guard let token = currentToken else {
-            print("❌ No hay token disponible para recargar incidencias")
-            return
-        }
-        fetchIncidencias(token: token)
+    func refetch() {
+        fetchIncidencias()
     }
-    
-    private func fetchIncidencias(token: String) {
-        guard let url = URL(string: "\(API.baseURL)/incidencias") else {
-            print("❌ URL no válida")
+
+    private func fetchIncidencias(retryOnUnauthorized: Bool = true) {
+        guard let token = currentToken,
+              let url = URL(string: "\(API.baseURL)/api/incidencias") else {
+            print("❌ Token o URL inválidos")
             return
         }
 
-        let authValue = "JWT \(token)"
-        
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
-        request.setValue(authValue, forHTTPHeaderField: "Authorization")
+        request.setValue("JWT \(token)", forHTTPHeaderField: "Authorization")
 
         URLSession.shared.dataTask(with: request) { data, response, error in
+            if let httpResponse = response as? HTTPURLResponse {
+                if httpResponse.statusCode == 401 && retryOnUnauthorized {
+                    print("⚠️ Token expirado, intentando refrescar...")
+
+                    // Intentamos refrescar el token
+                    self.auth.refreshTokenIfNeeded { success in
+                        if success {
+                            print("✅ Token refrescado, reintentando fetch...")
+                            DispatchQueue.main.async {
+                                self.currentToken = self.auth.token
+                                self.fetchIncidencias(retryOnUnauthorized: false)
+                            }
+                        } else {
+                            print("❌ No se pudo refrescar el token")
+                        }
+                    }
+                    return
+                }
+            }
+
             if let data = data {
                 if let decodedResponse = try? JSONDecoder().decode([Incidencia].self, from: data) {
                     DispatchQueue.main.async {
@@ -55,8 +69,8 @@ class IncidenciaListViewModel: ObservableObject {
                         print("✅ Incidencias cargadas: \(decodedResponse.count)")
                     }
                 } else {
-                    print("❌ Error al decodificar incidencias")
-                    print(String(data: data, encoding: .utf8) ?? "Respuesta no legible")
+                    print("❌ Error al decodificar las incidencias")
+                    print(String(data: data, encoding: .utf8) ?? "")
                 }
             } else if let error = error {
                 print("❌ Error en la solicitud: \(error.localizedDescription)")
@@ -64,5 +78,4 @@ class IncidenciaListViewModel: ObservableObject {
         }.resume()
     }
 }
-
 

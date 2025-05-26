@@ -26,10 +26,6 @@ urlpatterns = [
        path('admin/', admin.site.urls),
     path('api/', include("incidencias.urls")),
 
-    # Ruta para obtener el token JWT (access y refresh) mediante email y contraseña
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
 
-    # Ruta para refrescar el token access usando el token refresh válido
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
 ]
