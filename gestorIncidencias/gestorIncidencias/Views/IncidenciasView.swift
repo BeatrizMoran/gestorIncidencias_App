@@ -151,7 +151,7 @@ struct IncidenciasView: View {
 
                     Button(action: {
                         actualizarViewModel.actualizarIncidencia(incidencia: incidencia, nuevoEstado: estadoSeleccionado) {
-                            viewModel.refetch() 
+                            viewModel.refetch()
                             incidenciaSeleccionada = nil
                             withAnimation {
                                 mostrarDetalle = false
