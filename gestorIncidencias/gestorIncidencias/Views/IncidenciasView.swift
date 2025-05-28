@@ -110,6 +110,10 @@ struct IncidenciasView: View {
                     }
                 }
             }
+            .toolbarBackground(Color.black, for: .navigationBar) // Fondo negro para la barra
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarColorScheme(.dark, for: .navigationBar) // Esquema oscuro (íconos blancos)
+            .tint(.white)
             .blur(radius: mostrarDetalle ? 5 : 0)
 
             if let incidencia = incidenciaSeleccionada, mostrarDetalle {
