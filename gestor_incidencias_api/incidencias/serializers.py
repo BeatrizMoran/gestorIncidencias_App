@@ -9,6 +9,8 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'email', 'name']
+        ref_name = 'IncidenciasUserSerializer'
+
 
 class ComentarioIncidenciaSerializer(serializers.ModelSerializer):
     class Meta:

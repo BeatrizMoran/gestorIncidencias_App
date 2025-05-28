@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mysql.connector.django',
+    'drf_yasg',
     "djoser",
     "incidencias"
 ]
@@ -82,7 +83,7 @@ DATABASES = {
         'NAME': 'dam_grupo6',
         'USER': 'dam_grupo6',
         'PASSWORD': 'O9)jk.Jjl_c2CweY',
-        'HOST': '172.20.227.241',   # Desde casa: 150.241.37.58
+        'HOST': '150.241.37.58',   # Desde casa: 150.241.37.58
         'PORT': '3306',
     }
 }
@@ -147,11 +148,13 @@ REST_FRAMEWORK = {
 }
 
 SWAGGER_SETTINGS = {
-    "SECURITY_DEFINITIONS": {
-        "Authorization": {
-            "type": "apiKey",
-            "name": "Authorization",
-            "in": "header"
+    'SECURITY_DEFINITIONS': {
+        'Basic': {
+        'type': 'basic'
+        },
+    'Authorization':{
+        'type': 'apiKey',
+        'name': 'Authorization',
         }
     }
 }

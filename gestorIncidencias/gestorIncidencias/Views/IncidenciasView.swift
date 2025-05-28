@@ -15,6 +15,7 @@ struct IncidenciasView: View {
     @State private var incidenciaSeleccionada: Incidencia? = nil
     @State private var mostrarDetalle = false
     @State private var estadoSeleccionado: String = "pendiente"
+    @ObservedObject var notificacionesViewModel: NotificacionesListViewModel
     let estadosDisponibles = ["pendiente", "en_proceso", "resuelta", "cancelada"]
 
     var body: some View {
@@ -83,7 +84,10 @@ struct IncidenciasView: View {
                     }
                 }
                 .navigationDestination(isPresented: $mostrarNotificaciones) {
-                    NotificacionesView()
+                    NotificacionesView(
+                        selectedTab: $selectedTab,
+                        viewModel: notificacionesViewModel
+                    )
                 }
                 .onChange(of: selectedTab) { oldValue, newValue in
                     if newValue == .home {

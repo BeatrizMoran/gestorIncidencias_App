@@ -79,7 +79,7 @@ class ComentarioIncidencia(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"Comentario en Incidencia #{self.incidencia.id} por {self.autor.email}"
+        return f"Comentario en Incidencia #{self.incidencia.id} "
 
 class Notificacion(models.Model):
     incidencia = models.ForeignKey('Incidencia', on_delete=models.CASCADE, related_name='mensajes')

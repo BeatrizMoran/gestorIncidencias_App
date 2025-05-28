@@ -7,6 +7,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from drf_yasg.utils import swagger_auto_schema
+
 from incidencias.models import Incidencia, Notificacion, ComentarioIncidencia
 from incidencias.serializers import IncidenciaSerializer, NotificacionSerializer, ComentarioIncidenciaSerializer
 
@@ -25,7 +27,10 @@ class IncidenciasListApiView(APIView):
         return Response(serializer.data, status = status.HTTP_200_OK)
 
     # generar automáticamente documentación Swagger/OpenAPI
-    # @swagger_auto_schema(request_body=IncidenciaSerializer)
+    @swagger_auto_schema(request_body=IncidenciaSerializer,
+                         operation_description="Crear una nueva incidencia",
+                        operation_summary="Crear incidencia"
+                         )
     def post(self, request, *args, **kwargs):
         serializer = IncidenciaSerializer(data=request.data)
         if serializer.is_valid():
@@ -63,6 +68,7 @@ class IncidenciaDetailApiView(APIView):
         serializer = IncidenciaSerializer(incidencia_instance)
         return Response(serializer.data, status = status.HTTP_200_OK)
 
+    @swagger_auto_schema(request_body=IncidenciaSerializer)
     def put(self, request, incidencia_id, *args, **kwargs):
         incidencia_instance = self.get_object(incidencia_id)
         if not incidencia_instance:
@@ -88,6 +94,7 @@ class IncidenciaDetailApiView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @swagger_auto_schema(request_body=IncidenciaSerializer)
     def delete(self, request, incidencia_id, *args, **kwargs):
         incidencia_instance = self.get_object(incidencia_id)
         if not (incidencia_instance):
@@ -165,6 +172,7 @@ class ComentariosIncidenciaListApiView(APIView):
         serializer = ComentarioIncidenciaSerializer(comentarios, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @swagger_auto_schema(request_body=ComentarioIncidenciaSerializer)
     def post(self, request, incidencia_id, *args, **kwargs):
         # Añadir incidencia al data recibido para que el serializer pueda validar correctamente
         data = request.data.copy()
@@ -197,7 +205,7 @@ class ComentarioIncidenciaDetailApiView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-
+    @swagger_auto_schema(request_body=ComentarioIncidenciaSerializer)
     def delete(self, request, incidencia_id, comentario_id, *args, **kwargs):
         comentario = self.get_object(incidencia_id, comentario_id)
         if not comentario:

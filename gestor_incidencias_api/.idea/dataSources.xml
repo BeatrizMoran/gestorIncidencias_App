@@ -8,11 +8,14 @@
       <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/db.sqlite3</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="dam_grupo6@172.20.227.241" uuid="82748ac4-6152-4b6d-9a67-cedf68ac6a57">
+    <data-source source="LOCAL" name="dam_grupo6@150.241.37.58" uuid="82748ac4-6152-4b6d-9a67-cedf68ac6a57">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://172.20.227.241:3306/dam_grupo6</jdbc-url>
+      <jdbc-url>jdbc:mysql://150.241.37.58:3306/dam_grupo6</jdbc-url>
+      <jdbc-additional-properties>
+        <property name="database.introspection.mysql.dbe5060" value="true" />
+      </jdbc-additional-properties>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
