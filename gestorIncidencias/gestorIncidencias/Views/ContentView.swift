@@ -5,7 +5,9 @@
 //  Created by  on 5/5/25.
 //
 
+
 import SwiftUI
+
 
 enum Tab {
     case nueva
@@ -13,33 +15,38 @@ enum Tab {
     case resueltas
 }
 
+
 struct ContentView: View {
     @State private var selectedTab: Tab = .home
     @State private var isLoggedIn = false
 
+
     @StateObject private var authVM: AuthViewModel
     @StateObject private var incidenciaVM: IncidenciaListViewModel
     @StateObject private var actualizarVM: ActualizarIncidenciaViewModel
-    @StateObject private var notificacionesVM: NotificacionesListViewModel
+    @StateObject private var  notificacionesVM: NotificacionesListViewModel
+    
+
 
     init() {
         // Crear el ViewModel de autenticación
         let auth = AuthViewModel()
         _authVM = StateObject(wrappedValue: auth)
 
+
         // Crear el ViewModel de incidencias con la misma instancia de auth
         _incidenciaVM = StateObject(wrappedValue: IncidenciaListViewModel(auth: auth))
-        
+       
         _actualizarVM = StateObject(wrappedValue: ActualizarIncidenciaViewModel(authViewModel: auth))
-        
         _notificacionesVM = StateObject(
             wrappedValue: NotificacionesListViewModel(auth: auth)
         )
     }
 
+
     var body: some View {
         Group {
-            if isLoggedIn {
+            if authVM.isAuthenticated {
                 TabView(selection: $selectedTab) {
                     NuevaIncidenciaView(viewModel: NuevaIncidenciaViewModel(authViewModel: authVM), selectedTab: $selectedTab)
                         .tabItem {
@@ -47,8 +54,10 @@ struct ContentView: View {
                         }
                         .tag(Tab.nueva)
 
+
                     IncidenciasView(
                         selectedTab: $selectedTab,
+                        authVM: authVM,
                         viewModel: incidenciaVM,
                         actualizarViewModel: actualizarVM,
                         notificacionesViewModel: notificacionesVM
@@ -57,6 +66,7 @@ struct ContentView: View {
                             Label("Home", systemImage: "house")
                         }
                         .tag(Tab.home)
+
 
                     ResueltasView(viewModel: incidenciaVM)
                         .tabItem {
@@ -74,3 +84,6 @@ struct ContentView: View {
         }
     }
 }
+
+
+

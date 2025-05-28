@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		832B98182DE78D9B00F750DA /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = 832B98172DE78D9B00F750DA /* SwiftKeychainWrapper */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		831F7D4C2DC92AB5006A8285 /* gestorIncidencias.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = gestorIncidencias.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				832B98182DE78D9B00F750DA /* SwiftKeychainWrapper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = gestorIncidencias;
 			packageProductDependencies = (
+				832B98172DE78D9B00F750DA /* SwiftKeychainWrapper */,
 			);
 			productName = gestorIncidencias;
 			productReference = 831F7D4C2DC92AB5006A8285 /* gestorIncidencias.app */;
@@ -94,6 +100,9 @@
 			);
 			mainGroup = 831F7D432DC92AB5006A8285;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				832B98162DE78D9B00F750DA /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 831F7D4D2DC92AB5006A8285 /* Products */;
 			projectDirPath = "";
@@ -322,6 +331,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		832B98162DE78D9B00F750DA /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jrendel/SwiftKeychainWrapper";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		832B98172DE78D9B00F750DA /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 832B98162DE78D9B00F750DA /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 831F7D442DC92AB5006A8285 /* Project object */;
 }

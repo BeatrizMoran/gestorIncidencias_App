@@ -7,16 +7,24 @@
 
 struct Notificacion: Codable, Identifiable {
     let id: Int
-    let incidencia: Int
-    let remitente: Usuario?
-    let destinatario: Usuario
-    let cuerpo: String
-    let fechaEnvio: String
-    let leido: Bool
-}
+       let incidencia: Incidencia
+       let remitente: Usuario?
+       let destinatario: Usuario
+       let cuerpo: String
+       let fechaEnvio: String
+       let leido: Bool
+       
+       enum CodingKeys: String, CodingKey {
+           case id
+           case incidencia = "incidencia_data"
+           case remitente = "remitente_data"
+           case destinatario = "destinatario_data"
+           case cuerpo
+           case fechaEnvio = "fecha_envio"
+           case leido
+       }
+        
 
-enum CodingKeys: String, CodingKey {
-    case fechaEnvio = "fecha_envio"
-    case updatedAt = "updated_at"
+
 
 }

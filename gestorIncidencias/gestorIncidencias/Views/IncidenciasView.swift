@@ -9,13 +9,14 @@ import SwiftUI
 
 struct IncidenciasView: View {
     @Binding var selectedTab: Tab
+    @ObservedObject var authVM: AuthViewModel
     @ObservedObject var viewModel: IncidenciaListViewModel
     @ObservedObject var actualizarViewModel: ActualizarIncidenciaViewModel
+    @ObservedObject var notificacionesViewModel: NotificacionesListViewModel
     @State private var mostrarNotificaciones = false
     @State private var incidenciaSeleccionada: Incidencia? = nil
     @State private var mostrarDetalle = false
     @State private var estadoSeleccionado: String = "pendiente"
-    @ObservedObject var notificacionesViewModel: NotificacionesListViewModel
     let estadosDisponibles = ["pendiente", "en_proceso", "resuelta", "cancelada"]
 
     var body: some View {
@@ -50,6 +51,20 @@ struct IncidenciasView: View {
                                 .frame(width: 25, height: 25)
                                 .padding(.trailing, 4)
                         }
+                        
+                        Button(action: {
+                            
+                            authVM.logout()
+                            
+                        }) {
+                            Image(systemName: "return.left")
+                                .resizable()
+                                .foregroundStyle(Color.white)
+                                .scaledToFit()
+                                .frame(width: 25, height: 25)
+                                .padding(.trailing, 4)
+                        }
+                        
                     }
                     .padding()
                     .background(Color.black)
@@ -150,12 +165,33 @@ struct IncidenciasView: View {
                     .padding()
                     .background(Color(.systemGray6))
                     .cornerRadius(8)
+                    //MOSTRAR COMENTARIOS
+                    Text("Comentarios")
+                        .font(.headline)
+
+                    if incidencia.comentarios.isEmpty {
+                        Text("Sin comentarios.")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                    } else {
+                        ForEach(incidencia.comentarios) { comentario in
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("• \(comentario.texto)")
+                                    .font(.body)
+                                Text("Creado: \(comentario.createdAt)")
+                                    .font(.caption2)
+                                    .foregroundColor(.gray)
+                            }
+                            .padding(.bottom, 6)
+                        }
+                    }
+
 
                     Spacer()
 
                     Button(action: {
                         actualizarViewModel.actualizarIncidencia(incidencia: incidencia, nuevoEstado: estadoSeleccionado) {
-                            viewModel.refetch()
+                            viewModel.refetch() 
                             incidenciaSeleccionada = nil
                             withAnimation {
                                 mostrarDetalle = false
