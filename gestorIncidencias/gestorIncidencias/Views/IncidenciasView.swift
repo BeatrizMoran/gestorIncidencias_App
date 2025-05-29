@@ -141,21 +141,19 @@ struct IncidenciasView: View {
 
                     Text("Descripción")
                         .font(.headline)
-                    Text(incidencia.descripcion)
+                    Text(incidencia.descripcion.capitalized)
                         .font(.body)
 
                     Text("Ubicación")
                         .font(.headline)
-                    Text(incidencia.ubicacion)
+                    Text(incidencia.ubicacion.capitalized)
                         .font(.body)
                     
                     Text("Urgencia")
                         .font(.headline)
-                    Text(incidencia.urgencia)
+                    Text(incidencia.urgencia.capitalized)
                         .font(.body)
                     
-                    Text(incidencia.estado)
-
                     Text("Estado")
                         .font(.headline)
 
