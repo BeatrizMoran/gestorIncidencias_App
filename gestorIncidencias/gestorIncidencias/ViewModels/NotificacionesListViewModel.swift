@@ -84,5 +84,39 @@ class NotificacionesListViewModel: ObservableObject {
             }
         }.resume()
     }
+    
+    func marcarNotificacionComoLeida(id: Int) {
+        guard let token = currentToken,
+              let url = URL(string: "\(API.baseURL)/api/notificaciones/\(id)/marcar_leido") else {
+            print("❌ Token o URL inválidos")
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.setValue("JWT \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let body: [String: Any] = ["leido": true]
+        request.httpBody = try? JSONSerialization.data(withJSONObject: body)
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let httpResponse = response as? HTTPURLResponse {
+                if httpResponse.statusCode == 200 {
+                    print("✅ Notificación \(id) marcada como leída")
+                    DispatchQueue.main.async {
+                        if let index = self.notificaciones.firstIndex(where: { $0.id == id }) {
+                            self.notificaciones[index].leido = true
+                        }
+                    }
+                } else {
+                    print("❌ Error al marcar como leída: \(httpResponse.statusCode)")
+                }
+            } else if let error = error {
+                print("❌ Error de red: \(error.localizedDescription)")
+            }
+        }.resume()
+    }
+
 }
 

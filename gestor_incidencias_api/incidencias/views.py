@@ -16,15 +16,29 @@ from incidencias.serializers import IncidenciaSerializer, NotificacionSerializer
 # Create your views here.
 
 class IncidenciasListApiView(APIView):
-    #añade permisos para comprobar si el usuario esta autenticado
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        # Filtrar solo incidencias asignadas al usuario actual
+        # Incidencias del usuario autenticado
         incidencias = Incidencia.objects.filter(asignado_a=request.user)
+
+        # Obtener parámetros de filtro de la query
+        estado = request.query_params.get("estado")
+        urgencia = request.query_params.get("urgencia")
+        fecha = request.query_params.get("fecha")  # Esperado formato: "YYYY-MM-DD"
+
+        if estado:
+            incidencias = incidencias.filter(estado=estado)
+
+        if urgencia:
+            incidencias = incidencias.filter(urgencia=urgencia)
+
+        if fecha:
+            incidencias = incidencias.filter(created_at__date=fecha)
+
         serializer = IncidenciaSerializer(incidencias, many=True)
-        return Response(serializer.data, status = status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     # generar automáticamente documentación Swagger/OpenAPI
     @swagger_auto_schema(request_body=IncidenciaSerializer,
@@ -154,6 +168,21 @@ class NotificacionDetailApiView(APIView):
             )
         serializer = NotificacionSerializer(notificacion_instance)
         return Response(serializer.data, status = status.HTTP_200_OK)
+
+    def put(self, request, notificacion_id, *args, **kwargs):
+        notificacion_instance = self.get_object(notificacion_id)
+        if not notificacion_instance:
+            return Response(
+                {"res": "Object with notificacion id does not exist"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        # Solo actualizamos el campo `leido` a True
+        notificacion_instance.leido = True
+        notificacion_instance.save()
+
+        serializer = NotificacionSerializer(notificacion_instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 #Listar todos los comentarios de una incidencia, y crear comentario

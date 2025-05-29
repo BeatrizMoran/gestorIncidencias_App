@@ -12,7 +12,7 @@ struct Notificacion: Codable, Identifiable {
        let destinatario: Usuario
        let cuerpo: String
        let fechaEnvio: String
-       let leido: Bool
+       var leido: Bool
        
        enum CodingKeys: String, CodingKey {
            case id

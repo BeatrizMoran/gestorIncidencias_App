@@ -71,6 +71,10 @@ struct NotificacionesView: View {
                                     Text("● No leído")
                                         .font(.caption2)
                                         .foregroundColor(.blue)
+                                }else{
+                                    Text("● Leído")
+                                        .font(.caption2)
+                                        .foregroundColor(.blue)
                                 }
                             }
                             .padding(.vertical, 8)
@@ -79,6 +83,10 @@ struct NotificacionesView: View {
                                 withAnimation {
                                     mostrarDetalle = true
                                 }
+                                //marcar como leida la notificacion
+                                if !notificacion.leido {
+                                        viewModel.marcarNotificacionComoLeida(id: notificacion.id)
+                                    }
                             }
                         }
                         .listStyle(.plain)
@@ -136,6 +144,10 @@ struct NotificacionesView: View {
 
                     if noti.leido == false {
                         Text("No leída")
+                            .font(.caption)
+                            .foregroundColor(.blue)
+                    }else{
+                        Text("Leída")
                             .font(.caption)
                             .foregroundColor(.blue)
                     }
