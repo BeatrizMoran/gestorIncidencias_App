@@ -30,7 +30,7 @@ class AuthViewModel: ObservableObject {
 
     func login(email: String, password: String, completion: @escaping (Bool) -> Void) {
         guard let url = URL(string: "\(API.baseURL)/auth/jwt/create") else {
-            completion(false) // URL mal formada
+            completion(false)
             return
         }
        
@@ -48,7 +48,7 @@ class AuthViewModel: ObservableObject {
         URLSession.shared.dataTask(with: request) { data, response, error in
             guard let data = data else {
                 DispatchQueue.main.async {
-                    completion(false) // No hay datos, error en red
+                    completion(false)
                 }
                 return
             }
@@ -57,20 +57,17 @@ class AuthViewModel: ObservableObject {
             if let decodedResponse = try? JSONDecoder().decode(LoginResponse.self, from: data) {
                 DispatchQueue.main.async {
 
-
-                    //self.user = decodedResponse.user
-                    //self.token = decodedResponse.access_token
                     self.token = decodedResponse.access
                     self.refreshToken = decodedResponse.refresh
                     self.isAuthenticated = true
-                    // Guardar refresh token en Keychain
+
                     KeychainWrapper.standard.set(decodedResponse.refresh, forKey: "refreshToken")
 
 
 
 
                    
-                    completion(true) // ✅ Login correcto
+                    completion(true)
                 }
             } else {
                 DispatchQueue.main.async {
@@ -84,8 +81,8 @@ class AuthViewModel: ObservableObject {
         }.resume()
     }
    
-    //  Refresh Token
-        func refreshTokenIfNeeded(completion: @escaping (Bool) -> Void) {
+
+    func refreshTokenIfNeeded(completion: @escaping (Bool) -> Void) {
             guard let refresh = refreshToken,
                   let url = URL(string: "\(API.baseURL)/auth/jwt/refresh") else {
                 completion(false)
@@ -142,7 +139,6 @@ class AuthViewModel: ObservableObject {
     }
 
 
-    // Cargar el refresh token al abrir la app
     private func loadRefreshToken() {
     if let savedRefresh = KeychainWrapper.standard.string(forKey: "refreshToken") {
         self.refreshToken = savedRefresh

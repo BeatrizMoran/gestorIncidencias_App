@@ -66,7 +66,7 @@ class ActualizarIncidenciaViewModel: ObservableObject {
                     
                     if httpResponse.statusCode == 201 || httpResponse.statusCode == 200 {
                         self.successMessage = "Incidencia actualizada con éxito"
-                        completion() // 🔥 Llamamos al completion aquí
+                        completion() 
                     } else {
                         self.errorMessage = "Error del servidor. Código: \(httpResponse.statusCode)"
                     }

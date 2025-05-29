@@ -29,12 +29,11 @@ struct ContentView: View {
 
 
     init() {
-        // Crear el ViewModel de autenticación
+
         let auth = AuthViewModel()
         _authVM = StateObject(wrappedValue: auth)
 
 
-        // Crear el ViewModel de incidencias con la misma instancia de auth
         _incidenciaVM = StateObject(wrappedValue: IncidenciaListViewModel(auth: auth))
        
         _actualizarVM = StateObject(wrappedValue: ActualizarIncidenciaViewModel(authViewModel: auth))
@@ -77,8 +76,7 @@ struct ContentView: View {
                 .tint(.black)
             } else {
                 LoginView(onLoginSuccess: {
-                    isLoggedIn = true
-                    // No hace falta volver a crear el ViewModel aquí
+                                        
                 }, authVM: authVM)
             }
         }

@@ -29,7 +29,7 @@ class NotificacionesListViewModel: ObservableObject {
         tokenCancellable = auth.$token.sink { [weak self] token in
             guard let self = self, let token = token else { return }
             self.currentToken = token
-            self.fetchNotificaciones() // Usamos el token más reciente
+            self.fetchNotificaciones() 
         }
     }
 
@@ -53,7 +53,6 @@ class NotificacionesListViewModel: ObservableObject {
                 if httpResponse.statusCode == 401 && retryOnUnauthorized {
                     print("⚠️ Token expirado, intentando refrescar...")
 
-                    // Intentamos refrescar el token
                     self.auth.refreshTokenIfNeeded { success in
                         if success {
                             print("✅ Token refrescado, reintentando fetch...")

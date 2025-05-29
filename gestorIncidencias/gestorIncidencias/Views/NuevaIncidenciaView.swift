@@ -14,7 +14,6 @@ struct NuevaIncidenciaView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                // Cabecera
                 HStack {
                     
                     Image(systemName: "exclamationmark.bubble.fill")

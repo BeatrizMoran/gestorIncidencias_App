@@ -11,7 +11,6 @@ struct ComentarioIncidencia: Identifiable, Codable, Equatable {
     let createdAt: String
     let updatedAt: String
     let incidencia: Int  
-    // let autor: CustomUser? // 
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -19,7 +18,6 @@ struct ComentarioIncidencia: Identifiable, Codable, Equatable {
         case createdAt = "created_at"
         case updatedAt = "updated_at"
         case incidencia
-        // case autor
     }
 }
 

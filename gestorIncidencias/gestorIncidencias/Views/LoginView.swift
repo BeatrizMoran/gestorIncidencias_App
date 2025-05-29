@@ -32,7 +32,6 @@ struct LoginView: View {
                         if success {
                             onLoginSuccess()
                         } else {
-                            // Mostrar alerta, vibración, etc.
                             print("Credenciales inválidas")
                         }
                     }

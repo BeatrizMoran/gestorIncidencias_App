@@ -18,7 +18,6 @@ struct NotificacionesView: View {
         ZStack {
             NavigationStack {
                 VStack {
-                    // Encabezado
                     HStack {
                         Image(systemName: "bell.fill")
                             .resizable()
@@ -83,7 +82,6 @@ struct NotificacionesView: View {
                                 withAnimation {
                                     mostrarDetalle = true
                                 }
-                                //marcar como leida la notificacion
                                 if !notificacion.leido {
                                         viewModel.marcarNotificacionComoLeida(id: notificacion.id)
                                     }
@@ -103,7 +101,6 @@ struct NotificacionesView: View {
             }
             .blur(radius: mostrarDetalle ? 5 : 0)
 
-            // Detalle de la notificación seleccionada
             if let noti = notificacionSeleccionada, mostrarDetalle {
                 Color.black.opacity(0.4)
                     .ignoresSafeArea()

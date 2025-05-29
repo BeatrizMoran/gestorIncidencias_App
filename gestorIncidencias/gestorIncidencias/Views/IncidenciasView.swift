@@ -110,9 +110,9 @@ struct IncidenciasView: View {
                     }
                 }
             }
-            .toolbarBackground(Color.black, for: .navigationBar) // Fondo negro para la barra
+            .toolbarBackground(Color.black, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
-            .toolbarColorScheme(.dark, for: .navigationBar) // Esquema oscuro (íconos blancos)
+            .toolbarColorScheme(.dark, for: .navigationBar) 
             .tint(.white)
             .blur(radius: mostrarDetalle ? 5 : 0)
 
