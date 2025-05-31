@@ -25,8 +25,19 @@ schema_view = get_schema_view(
     openapi.Info(
         title="Incidencias API",
         default_version='v1',
-        description="Gestor de incidencias API",
-        terms_of_service="https://www.google.com/policies/terms/",
+        description="""
+                API para la gestión de incidencias.
+
+                ⚠️ **IMPORTANTE**: Todos los endpoints requieren autenticación JWT.
+
+                1. Ve a `/auth/jwt/create` e inicia sesión con tus credenciales para obtener el token.
+                    1.1.- email: prueba@gmail.com, password: prueba
+                2. Copia el campo `access`.
+                3. Haz clic en el botón **Authorize** arriba a la derecha.
+                4. Pega el token en este formato: `JWT <tu_token>`.
+
+                Después de eso, podrás probar los endpoints protegidos desde Swagger UI.
+                """,        terms_of_service="https://www.google.com/policies/terms/",
         contact=openapi.Contact(email="<beatriz.moran@ikasle.egibide.org>"),
         license=openapi.License(name="MIT License"),
     ),

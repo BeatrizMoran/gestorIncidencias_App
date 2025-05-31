@@ -1,0 +1,372 @@
+{
+	"info": {
+		"_postman_id": "31c09539-d868-420e-89b9-e536eb5301de",
+		"name": "INCIDENCIAS_APP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32393677",
+		"_collection_link": "https://solar-station-762449.postman.co/workspace/prueba~5402b29b-36b8-4ae2-8b74-16bb620458ee/collection/32393677-31c09539-d868-420e-89b9-e536eb5301de?action=share&source=collection_link&creator=32393677"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "LOGIN",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@gmail.com\",\n    \"password\": \"admin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://10.100.252.110:8000/auth/jwt/create",
+							"protocol": "http",
+							"host": [
+								"10",
+								"100",
+								"252",
+								"110"
+							],
+							"port": "8000",
+							"path": [
+								"auth",
+								"jwt",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "refreshToken",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"refresh\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0ODQ1MTY1MiwiaWF0IjoxNzQ4Mjc4ODUyLCJqdGkiOiIwZmFmOWEzY2Q4ZjA0OWFhYWZmYmRkNzI3MTFkMzRmYiIsInVzZXJfaWQiOjF9.bcYN6i_YgcyJMRallyzIC6Nh78fR3yvwluV6s9SaYHs\" \n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://10.100.252.110:8000/auth/jwt/refresh",
+							"protocol": "http",
+							"host": [
+								"10",
+								"100",
+								"252",
+								"110"
+							],
+							"port": "8000",
+							"path": [
+								"auth",
+								"jwt",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Incidencias",
+			"item": [
+				{
+					"name": "FiltrosIncidencias",
+					"item": [
+						{
+							"name": "filtroEstado",
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4NTQ2MjQyLCJpYXQiOjE3NDg0NTk4NDIsImp0aSI6IjFmOGNlM2FiNWRmZTRjZDViMjExODk1OGIxYjVmMzdlIiwidXNlcl9pZCI6MX0.LLBJuOaqlHwdifrxVrvVV8iUT-oG-MA_yTgJsxpUVlU",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8000/api/incidencias?estado=resuelta\n",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"incidencias"
+									],
+									"query": [
+										{
+											"key": "estado",
+											"value": "resuelta\n"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "filtroUrgencia",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "filtroFecha",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						},
+						{
+							"name": "filtroCombinado",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "list",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ4NTQyMzk3LCJpYXQiOjE3NDg0NTU5OTcsImp0aSI6IjUxY2NhOWRiN2RlYzRlZWNiOTMzNGU1NTRiMDJhNWVjIiwidXNlcl9pZCI6MX0.WucS31jVdMNHs7qSOoD-kWVuN8LoChqE2f04Q0ZnT9k",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/api/incidencias",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"incidencias"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/incidencias/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"incidencias",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MzMxMDg2LCJpYXQiOjE3NDcyNDQ2ODYsImp0aSI6ImU0NTBlMmNjZDA2MTQ2YmU5MmQ2YmFiNTkwNjc3OGEzIiwidXNlcl9pZCI6MX0.o3xJlRiD_kOoZUMSA4-ciQUlZkfklxpHGF_-rHq-c00",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"descripcion\": \"Ordenador no enciende\",\n  \"ubicacion\": \"Aula 204\",\n  \"urgencia\": \"alta\",\n  \"estado\": \"pendiente\",\n  \"asignado_a\": 1\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/api/incidencias",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"incidencias"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "modify",
+					"request": {
+						"method": "PUT",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "apikey",
+							"apikey": [
+								{
+									"key": "value",
+									"value": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ3MzMxMDg2LCJpYXQiOjE3NDcyNDQ2ODYsImp0aSI6ImU0NTBlMmNjZDA2MTQ2YmU5MmQ2YmFiNTkwNjc3OGEzIiwidXNlcl9pZCI6MX0.o3xJlRiD_kOoZUMSA4-ciQUlZkfklxpHGF_-rHq-c00",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/incidencias/3",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"incidencias",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Notificaciones",
+			"item": [
+				{
+					"name": "list",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "detail",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "marcarLleido",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ComentariosIncidencias",
+			"item": [
+				{
+					"name": "list",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "detail",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"method": "DELETE",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

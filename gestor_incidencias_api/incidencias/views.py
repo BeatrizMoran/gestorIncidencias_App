@@ -19,6 +19,10 @@ class IncidenciasListApiView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+                         operation_summary="Listar incidencias del usaurio",
+                         operation_description="Devuelve todas las incidencias asignadas al usuario autenticado. Se pueden aplicar filtros por estado, urgencia y fecha."
+                         )
     def get(self, request, *args, **kwargs):
         # Incidencias del usuario autenticado
         incidencias = Incidencia.objects.filter(asignado_a=request.user)
@@ -70,6 +74,10 @@ class IncidenciaDetailApiView(APIView):
         except Incidencia.DoesNotExist:
             return None
 
+    @swagger_auto_schema(
+        operation_summary="Obtener detalles de una incidencia",
+        operation_description="Devuelve la información detallada de una incidencia específica, identificada por su ID. Solo accesible si la incidencia está asignada al usuario autenticado."
+    )
     def get(self, request, incidencia_id, *args, **kwargs):
         incidencia_instance = self.get_object(incidencia_id)
         if not(incidencia_instance):
@@ -82,7 +90,9 @@ class IncidenciaDetailApiView(APIView):
         serializer = IncidenciaSerializer(incidencia_instance)
         return Response(serializer.data, status = status.HTTP_200_OK)
 
-    @swagger_auto_schema(request_body=IncidenciaSerializer)
+    @swagger_auto_schema(request_body=IncidenciaSerializer,
+                         operation_summary="Actualizar una incidencia",
+                         operation_description="Actualizar una incidencia")
     def put(self, request, incidencia_id, *args, **kwargs):
         incidencia_instance = self.get_object(incidencia_id)
         if not incidencia_instance:
@@ -108,7 +118,8 @@ class IncidenciaDetailApiView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @swagger_auto_schema(request_body=IncidenciaSerializer)
+    @swagger_auto_schema(request_body=IncidenciaSerializer,
+                         operation_summary="Borrar una incidencia",)
     def delete(self, request, incidencia_id, *args, **kwargs):
         incidencia_instance = self.get_object(incidencia_id)
         if not (incidencia_instance):
@@ -128,12 +139,13 @@ class NotificacionesUsuarioView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+                         operation_summary="Optener detalle de una notificacion" )
     def get(self, request):
         notificaciones = Notificacion.objects.filter(destinatario=request.user).order_by('-fecha_envio')
         serializer = NotificacionSerializer(notificaciones, many=True)
         return Response(serializer.data)
 
-#Gerentes
 
 
 class NotificacionesListApiView(APIView):
@@ -141,6 +153,10 @@ class NotificacionesListApiView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
+    @swagger_auto_schema(
+        operation_summary="Listar notificaciones",
+        operation_description="Devuelve todas las notificaciones asignadas al usuario autenticado."
+    )
     def get(self, request, *args, **kwargs):
         # Filtrar solo notificaciones asignadas al usuario actual
         notificaciones = Notificacion.objects.filter(destinatario=request.user)
@@ -157,6 +173,10 @@ class NotificacionDetailApiView(APIView):
         except Notificacion.DoesNotExist:
             return None
 
+    @swagger_auto_schema(
+        operation_summary="Obtener detalle de una notificación",
+        operation_description="Devuelve la notificación especificada por ID, solo si pertenece al usuario autenticado."
+    )
     def get(self, request, notificacion_id, *args, **kwargs):
         notificacion_instance = self.get_object(notificacion_id)
         if not(notificacion_instance):
@@ -169,6 +189,10 @@ class NotificacionDetailApiView(APIView):
         serializer = NotificacionSerializer(notificacion_instance)
         return Response(serializer.data, status = status.HTTP_200_OK)
 
+    @swagger_auto_schema(
+        operation_summary="Marcar notificación como leída",
+        operation_description="Actualiza el estado de la notificación estableciendo el campo 'leido' a True."
+    )
     def put(self, request, notificacion_id, *args, **kwargs):
         notificacion_instance = self.get_object(notificacion_id)
         if not notificacion_instance:
@@ -201,7 +225,8 @@ class ComentariosIncidenciaListApiView(APIView):
         serializer = ComentarioIncidenciaSerializer(comentarios, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @swagger_auto_schema(request_body=ComentarioIncidenciaSerializer)
+    @swagger_auto_schema(request_body=ComentarioIncidenciaSerializer,
+                         operation_summary="Crear nuevo comentario incidencia")
     def post(self, request, incidencia_id, *args, **kwargs):
         # Añadir incidencia al data recibido para que el serializer pueda validar correctamente
         data = request.data.copy()
@@ -226,6 +251,8 @@ class ComentarioIncidenciaDetailApiView(APIView):
         except ComentarioIncidencia.DoesNotExist:
             return None
 
+    @swagger_auto_schema(
+                         operation_summary="Obtener detalles de un comentario incidencia")
     def get(self, request, incidencia_id, comentario_id, *args, **kwargs):
         comentario = self.get_object(incidencia_id, comentario_id)
         if not comentario:
@@ -234,7 +261,8 @@ class ComentarioIncidenciaDetailApiView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-    @swagger_auto_schema(request_body=ComentarioIncidenciaSerializer)
+    @swagger_auto_schema(request_body=ComentarioIncidenciaSerializer,
+                         operation_summary="Borrar comentario incidencia")
     def delete(self, request, incidencia_id, comentario_id, *args, **kwargs):
         comentario = self.get_object(incidencia_id, comentario_id)
         if not comentario:
