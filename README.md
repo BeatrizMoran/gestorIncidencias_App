@@ -1,5 +1,10 @@
 # Gestión de Incidencias
 
+ENLACE AL VIDEO EXPLICATIVO DE LA APP:
+
+https://drive.google.com/file/d/1nd5wh0g8thOQjHC_PP-2Sq04gvnYTrRU/view?usp=drive_link
+
+
 Una empresa de la zona ha contratado a vuestro equipo para desarrollar una nueva aplicación que permita gestionar de manera ágil y eficiente las incidencias reportadas en su operativa diaria. La aplicación estará destinada principalmente a los operarios encargados de resolver las incidencias, aunque también será utilizada por el personal de gerencia.
 
 Se pretende automatizar los siguientes procesos:
