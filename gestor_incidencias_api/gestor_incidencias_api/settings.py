@@ -83,7 +83,7 @@ DATABASES = {
         'NAME': 'dam_grupo6',
         'USER': 'dam_grupo6',
         'PASSWORD': 'O9)jk.Jjl_c2CweY',
-        'HOST': '150.241.37.58',   # Desde casa: 150.241.37.58
+        'HOST': '150.241.37.58',   # Desde casa: 150.241.37.58, desde una red de egibide: 172.20.227.241
         'PORT': '3306',
     }
 }

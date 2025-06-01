@@ -20,7 +20,7 @@ class IncidenciasListApiView(APIView):
     permission_classes = [IsAuthenticated]
 
     @swagger_auto_schema(
-                         operation_summary="Listar incidencias del usaurio",
+                         operation_summary="Listar incidencias del usuario",
                          operation_description="Devuelve todas las incidencias asignadas al usuario autenticado. Se pueden aplicar filtros por estado, urgencia y fecha."
                          )
     def get(self, request, *args, **kwargs):
@@ -30,7 +30,7 @@ class IncidenciasListApiView(APIView):
         # Obtener parámetros de filtro de la query
         estado = request.query_params.get("estado")
         urgencia = request.query_params.get("urgencia")
-        fecha = request.query_params.get("fecha")  # Esperado formato: "YYYY-MM-DD"
+        fecha = request.query_params.get("fecha")
 
         if estado:
             incidencias = incidencias.filter(estado=estado)
@@ -133,7 +133,6 @@ class IncidenciaDetailApiView(APIView):
             status=status.HTTP_200_OK
         )
 
-#Mensajes
 
 class NotificacionesUsuarioView(APIView):
     authentication_classes = [JWTAuthentication]

@@ -44,9 +44,17 @@ Levantar el servidor:
 Datos para pruebas
 Para realizar pruebas con la aplicación, puedes usar el siguiente usuario de prueba:
 
-    Email: prueba@gmail.com
+    -Usuario operario:
 
-    Contraseña: prueba
+        Email: prueba@gmail.com
+
+        Contraseña: prueba
+
+    - Usuario administrador:
+
+        Email: admin@gmail.com
+
+        Contraseña: admin
 
 Pruebas API con Postman
     Importa la colección postman-tests/INCIDENCIAS_APP.postman_collection.json en Postman para probar los endpoints de la API.
